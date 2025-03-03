@@ -1,56 +1,39 @@
-// import React, { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { fetchBooks } from "../redux/actions/booksActions";
 
-// const BookList = () => {
-//   const dispatch = useDispatch();
-//   const { books, loading, error } = useSelector((state) => state.books);
+import { logout } from '@/redux/actions/authActions';
+import { HStack, Text,Button } from '@chakra-ui/react';
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
-//   useEffect(() => {
-//     dispatch(fetchBooks());
-//   }, [dispatch]);
+const MyBooksPage = () => {
+    const user=useSelector((state)=>state.auth.user);
+    const userDetails=JSON.parse(localStorage.getItem("user"))||[];
+    //console.log(userDetails.uid, "userdetails");
+   
+    const books=JSON.parse(localStorage.getItem("books"));
+    console.log(books)
 
-//   if (loading) return <p>Loading books...</p>;
-//   if (error) return <p>Error: {error}</p>;
+    const dispatch=useDispatch();
+    const navigate=useNavigate();
 
-//   return (
-//     <div>
-//       <h2>Books List</h2>
-//       <ul>
-//         {books.map((book) => (
-//           <li key={book.id}>
-//             <strong>{book.title}</strong> by {book.author}
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
+    //logout function
 
-// export default BookList;
-import React from "react";
-
-const BookList = ({ books }) => {
-  if (!books || Object.keys(books).length === 0) {
-    return <p>⚠️ No books available.</p>;
-  }
-
+   const handleLogout=()=>{
+        dispatch(logout());
+        navigate("/");
+    }
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "20px" }}>
-      {Object.keys(books).map((bookId) => {
-        const book = books[bookId];
-        return (
-          <div key={bookId} style={{ border: "1px solid #ddd", padding: "10px", textAlign: "center" }}>
-            <img src={book.coverImage} alt={book.title} width={100} />
-            <h3>{book.title}</h3>
-            <p>Author: {book.author}</p>
-            <p>Status: {book.status}</p>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+    <>
+    {/* {user &&  <Text  ml={"70%"}>Welcome {userDetails.email}</Text>} */}
+   
+    <HStack>
+        <Button ml={"90%"} mt={2}
+        onClick={handleLogout}
+        >Logout</Button>
+       
+    </HStack>
+    </>
+  )
+}
 
-export default BookList;
-
+export default MyBooksPage

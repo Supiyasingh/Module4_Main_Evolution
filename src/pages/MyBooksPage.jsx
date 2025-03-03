@@ -1,25 +1,37 @@
-// pages/MyBooksPage.jsx
-import React from "react";
-import { useSelector } from "react-redux";
-import MyBookCard from "../components/BookCard";
+import { logout } from '@/redux/actions/authActions';
+import { HStack, Text,Button } from '@chakra-ui/react';
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 const MyBooksPage = () => {
-  const { books } = useSelector((state) => state.books);
-  const { user } = useSelector((state) => state.auth);
+    const user=useSelector((state)=>state.auth.user);
+    const userDetails=JSON.parse(localStorage.getItem("user"))||[];
+    //console.log(userDetails.uid, "userdetails");
+   
+    const books=JSON.parse(localStorage.getItem("books"));
+    console.log(books)
 
-  // Filter books added by the logged-in user
-  const userBooks = books.filter((book) => book.addedBy === user?.email);
+    const dispatch=useDispatch();
+    const navigate=useNavigate();
 
+    //logout function
+
+   const handleLogout=()=>{
+        dispatch(logout());
+        navigate("/");
+    }
   return (
-    <div>
-      <h2>My Books</h2>
-      {userBooks.length === 0 ? (
-        <p>You haven't added any books yet.</p>
-      ) : (
-        userBooks.map((book) => <MyBookCard key={book.id} book={book} />)
-      )}
-    </div>
-  );
-};
+    <>
+  
+    <HStack>
+        <Button ml={"90%"} mt={2}
+        onClick={handleLogout}
+        >Logout</Button>
+       
+    </HStack>
+    </>
+  )
+}
 
-export default MyBooksPage;
+export default MyBooksPage
